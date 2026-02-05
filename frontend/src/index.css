@@ -1,10 +1,106 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-@theme {
-  --color-gray-50: #f9fafb;
-  --color-gray-900: #111827;
-}
+/* Color palette:
+   Navy: #364F6B
+   Teal: #3FC1C9
+   Light: #F5F5F5
+   Coral: #FC5185
+*/
 
 body {
-  @apply bg-gray-50 text-gray-900;
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  background-color: #F5F5F5;
+  color: #364F6B;
+}
+
+/* Solid button styles */
+.btn-primary {
+  background-color: #3FC1C9;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #2fa8af;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(63, 193, 201, 0.3);
+}
+
+.btn-coral {
+  background-color: #FC5185;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-coral:hover {
+  background-color: #e63d6d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(252, 81, 133, 0.3);
+}
+
+.btn-navy {
+  background-color: #364F6B;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-navy:hover {
+  background-color: #2a3d52;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(54, 79, 107, 0.3);
+}
+
+.btn-success {
+  background-color: #10b981;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Keep gradient utilities for backward compatibility */
+.btn-gradient {
+  background-color: #3FC1C9;
+  transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+  background-color: #2fa8af;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(63, 193, 201, 0.3);
+}
+
+.btn-success-gradient {
+  background-color: #10b981;
+  transition: all 0.3s ease;
+}
+
+.btn-success-gradient:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3FC1C9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #364F6B;
 }

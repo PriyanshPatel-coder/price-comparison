@@ -30,17 +30,54 @@ const getPriceComparison = async (query) => {
     const results = response.data.shopping_results || [];
     console.log(`[Service] Found ${results.length} items.`);
 
-    // Map and sort results
-    const products = results.map(item => ({
-      title: item.title,
-      price: item.price,
-      // Fallback for extracted_price if not present
-      extracted_price: item.extracted_price || (item.price ? parseFloat(item.price.toString().replace(/[^0-9.]/g, '')) : 0),
-      link: item.product_link || item.link,
-      image: item.thumbnail,
-      source: item.source,
-      delivery: item.delivery
-    })).sort((a, b) => a.extracted_price - b.extracted_price);
+    // Map and sort results with improved data extraction
+    const products = results.map(item => {
+      // Better source/store extraction
+      let source = item.source || item.store || item.merchant || item.seller || 'Online Store';
+
+      // Better price extraction
+      let priceValue = 0;
+      let priceString = '';
+
+      if (item.extracted_price) {
+        priceValue = item.extracted_price;
+        priceString = item.price || `₹${priceValue}`;
+      } else if (item.price) {
+        // Try to extract number from price string
+        const priceStr = item.price.toString();
+        const priceMatch = priceStr.match(/[\d,]+\.?\d*/);
+        if (priceMatch) {
+          priceValue = parseFloat(priceMatch[0].replace(/,/g, ''));
+          priceString = priceStr;
+        }
+      }
+
+      // Logo mapping
+      let logo = '';
+      const lowerSource = source.toLowerCase();
+
+      if (lowerSource.includes('amazon')) logo = 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg';
+      else if (lowerSource.includes('flipkart')) logo = 'https://upload.wikimedia.org/wikipedia/en/7/7a/Flipkart_logo.svg';
+      else if (lowerSource.includes('croma')) logo = 'https://upload.wikimedia.org/wikipedia/commons/f/fc/Croma_Logo.png';
+      else if (lowerSource.includes('reliance')) logo = 'https://www.reliancedigital.in/build/client/images/loaders/rd_logo.svg';
+      else if (lowerSource.includes('myntra')) logo = 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Myntra_logo.png';
+      else if (lowerSource.includes('nike')) logo = 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg';
+      else logo = item.thumbnail || '';
+
+      return {
+        title: item.title || 'Product',
+        price: priceString || `₹${priceValue}`,
+        extracted_price: priceValue,
+        link: item.product_link || item.link || '#',
+        image: item.thumbnail || '',
+        source: source,
+        logo: logo,
+        delivery: item.delivery || ''
+      };
+    })
+      .filter(product => product.extracted_price > 0) // Remove items without valid prices
+      .sort((a, b) => a.extracted_price - b.extracted_price)
+      .slice(0, 5); // Return only top 5 lowest prices
 
     return products;
   } catch (error) {
