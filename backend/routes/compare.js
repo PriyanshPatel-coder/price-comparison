@@ -44,10 +44,22 @@ router.get('/', async (req, res) => {
 
     try {
         // Fetch from both APIs in parallel for faster response
-        const [googleShoppingProducts, amazonProducts] = await Promise.all([
+        // Use allSettled so one failure doesn't crash the entire request
+        const results = await Promise.allSettled([
             getPriceComparison(q),
             getAmazonProducts(q)
         ]);
+
+        const googleShoppingProducts = results[0].status === 'fulfilled' ? results[0].value : [];
+        const amazonProducts = results[1].status === 'fulfilled' ? results[1].value : [];
+
+        // Log errors if any occurred, but don't stop the request
+        if (results[0].status === 'rejected') {
+            console.error('[Compare] Google Shopping API Failed:', results[0].reason.message);
+        }
+        if (results[1].status === 'rejected') {
+            console.error('[Compare] Amazon API Failed:', results[1].reason.message);
+        }
 
         console.log(`[Compare] Google Shopping: ${googleShoppingProducts.length}, Amazon: ${amazonProducts.length}`);
 
