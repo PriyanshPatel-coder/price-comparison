@@ -10,13 +10,23 @@ require('dotenv').config();
  * Only products from these sellers will be returned.
  */
 const TRUSTED_SELLERS = [
-    'amazon',
-    'ebay',
-    'walmart',
-    'best buy',
-    'bestbuy',
-    'target',
-    'costco'
+    // Major Retailers
+    'amazon', 'ebay', 'walmart', 'best buy', 'bestbuy', 'target', 'costco',
+
+    // Department Stores
+    'macys', "macy's", 'nordstrom', 'kohls', "kohl's", 'bloomingdales', 'jcpenney',
+
+    // Sporting Goods
+    'dicks sporting goods', 'dick\'s', 'foot locker', 'champs sports', 'rei',
+    'academy sports', 'big 5', 'fanatics',
+
+    // Brand Official Stores (Shoes/Apparel)
+    'nike', 'adidas', 'puma', 'reebok', 'new balance', 'under armour', 'asics',
+    'converse', 'vans', 'crocs', 'timberland', 'skechers', 'hoka', 'brooks',
+
+    // Electronics & Home
+    'b&h', 'newegg', 'wayfair', 'home depot', 'lowes', 'staples', 'office depot',
+    'gamestop', 'dell', 'hp', 'lenovo', 'apple', 'samsung', 'sony', 'lg'
 ];
 
 /**
