@@ -112,7 +112,7 @@ const SearchBar = ({ onSearch, query, setQuery }) => {
     const { type, items } = getDropdownItems();
 
     return (
-        <div className="w-full max-w-4xl mx-auto" ref={wrapperRef}>
+        <div className="w-full max-w-lg mx-auto" ref={wrapperRef}>
             {/* Title Section */}
             <div className="text-center mb-8">
                 <h2 className="text-4xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
@@ -126,45 +126,57 @@ const SearchBar = ({ onSearch, query, setQuery }) => {
             <div className="relative">
                 <form
                     onSubmit={handleSubmit}
-                    className={`flex items-center rounded-2xl overflow-hidden transition-all duration-300 border ${isFocused ? 'ring-2' : ''}`}
+                    className={`flex items-center rounded-full overflow-hidden transition-all duration-300 shadow-md hover:shadow-lg w-full ${isFocused ? 'ring-2 ring-opacity-50' : 'border border-opacity-20'}`}
                     style={{
-                        borderColor: 'var(--border-color)',
+                        backgroundColor: 'var(--bg-card)',
+                        borderColor: isFocused ? 'var(--accent-teal)' : 'var(--border-color)',
                         '--tw-ring-color': 'var(--accent-teal)'
                     }}
                 >
-                    <div className="relative flex-1 transition-colors duration-300" style={{ backgroundColor: 'var(--bg-card)' }}>
-                        <div className="absolute left-5 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }}>
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
-                        <input
-                            type="text"
-                            value={query}
-                            onChange={(e) => {
-                                setQuery(e.target.value);
-                                setShowDropdown(true);
-                            }}
-                            onFocus={() => {
-                                setIsFocused(true);
-                                setShowDropdown(true);
-                            }}
-                            onBlur={() => setIsFocused(false)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Search for any product (e.g., iPhone 15, Nike Air Max...)"
-                            className="w-full pl-14 pr-6 py-5 text-lg focus:outline-none bg-transparent"
-                            style={{ color: 'var(--text-primary)' }}
-                            autoComplete="off"
-                        />
+                    {/* Search Icon (Left) */}
+                    <div
+                        className="flex items-center justify-center pl-6 pr-4 transition-colors duration-300 flex-shrink-0"
+                        style={{ color: isFocused ? 'var(--accent-teal)' : 'var(--text-muted)' }}
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
                     </div>
+
+                    {/* Input Field */}
+                    <input
+                        type="text"
+                        value={query}
+                        onChange={(e) => {
+                            setQuery(e.target.value);
+                            setShowDropdown(true);
+                        }}
+                        onFocus={() => {
+                            setIsFocused(true);
+                            setShowDropdown(true);
+                        }}
+                        onBlur={() => setIsFocused(false)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Search..."
+                        className="flex-1 w-full py-3 text-base font-medium focus:outline-none bg-transparent min-w-0"
+                        style={{ color: 'var(--text-primary)' }}
+                        autoComplete="off"
+                    />
+
+                    {/* Gradient Search Button (Right) */}
                     <button
                         type="submit"
-                        className="text-white px-10 py-5 font-semibold text-lg flex items-center gap-2 transition-all duration-300 hover:opacity-90"
-                        style={{ backgroundColor: 'var(--accent-teal)' }}
+                        className="p-3 m-1 rounded-full transition-all duration-300 transform hover:scale-110 active:scale-95 shadow-md flex-shrink-0 flex items-center justify-center group"
+                        style={{
+                            background: 'linear-gradient(135deg, #2dd4bf 0%, #3b82f6 100%)', // Teal to Blue gradient
+                            color: '#ffffff',
+                            minWidth: '42px',
+                            minHeight: '42px'
+                        }}
+                        aria-label="Search"
                     >
-                        <span>Search</span>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        <svg className="w-5 h-5 transform group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </button>
                 </form>
@@ -251,7 +263,7 @@ const SearchBar = ({ onSearch, query, setQuery }) => {
                     </button>
                 ))}
             </div>
-        </div>
+        </div >
     );
 };
 
