@@ -4,6 +4,7 @@ import SearchBar from '../components/SearchBar';
 import ProductCard from '../components/ProductCard';
 import Header from '../components/Header';
 import PriceTable from '../components/PriceTable';
+import { API_ENDPOINTS } from '../config/api';
 
 const Home = () => {
     const [products, setProducts] = useState([]);
@@ -19,7 +20,7 @@ const Home = () => {
         setHasSearched(true);
 
         try {
-            const response = await axios.get(`http://localhost:5000/api/compare?q=${encodeURIComponent(query)}`);
+            const response = await axios.get(`${API_ENDPOINTS.COMPARE}?q=${encodeURIComponent(query)}`);
             setProducts(response.data);
         } catch (err) {
             console.error(err);

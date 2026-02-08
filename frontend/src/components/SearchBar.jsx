@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api';
 
 const SearchBar = ({ onSearch, query, setQuery }) => {
     const [isFocused, setIsFocused] = useState(false);
@@ -39,7 +40,7 @@ const SearchBar = ({ onSearch, query, setQuery }) => {
             }
 
             try {
-                const response = await axios.get(`http://localhost:5000/api/compare/suggestions?q=${encodeURIComponent(query)}`);
+                const response = await axios.get(`${API_ENDPOINTS.SUGGESTIONS}?q=${encodeURIComponent(query)}`);
                 setSuggestions(response.data);
                 setSelectedIndex(-1);
             } catch (error) {
