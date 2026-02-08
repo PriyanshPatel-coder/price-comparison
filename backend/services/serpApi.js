@@ -154,18 +154,37 @@ const getPriceComparison = async (query) => {
         const validPriceProducts = allProducts.filter(p => p.extracted_price > 0);
         console.log(`[Service] Products with valid prices: ${validPriceProducts.length}`);
 
-        // Step 3: Filter to ONLY trusted sellers
+        // Step 3: Separate Trusted and Untrusted
         const trustedProducts = validPriceProducts.filter(p => isTrustedSeller(p.source));
+        const otherProducts = validPriceProducts.filter(p => !isTrustedSeller(p.source));
+
         console.log(`[Service] Products from TRUSTED sellers: ${trustedProducts.length}`);
+        console.log(`[Service] Products from OTHER sellers: ${otherProducts.length}`);
 
-        // Step 4: Deduplicate - keep only cheapest per seller
-        const dedupedProducts = deduplicateBySeller(trustedProducts);
-        console.log(`[Service] After deduplication: ${dedupedProducts.length} unique sellers`);
+        // Step 4: Deduplicate Trusted - keep only cheapest per seller
+        let finalProducts = deduplicateBySeller(trustedProducts);
 
-        // Step 5: Sort by price (lowest first) and limit
-        const finalProducts = dedupedProducts
-            .sort((a, b) => a.extracted_price - b.extracted_price)
-            .slice(0, 6); // Return up to 6 trusted sellers
+        // Step 5: Fallback - If we don't have enough trusted results, fill with others
+        if (finalProducts.length < 6) {
+            const slotsNeeded = 6 - finalProducts.length;
+            console.log(`[Service] Not enough trusted results. Filling ${slotsNeeded} slots with other sellers.`);
+
+            // Deduplicate other products too
+            const dedupedOthers = deduplicateBySeller(otherProducts);
+
+            // Sort others by price and take the best ones
+            const bestOthers = dedupedOthers
+                .sort((a, b) => a.extracted_price - b.extracted_price)
+                .slice(0, slotsNeeded);
+
+            // Combine them
+            finalProducts = [...finalProducts, ...bestOthers];
+        }
+
+        console.log(`[Service] After merging fallback: ${finalProducts.length} unique sellers`);
+
+        // Step 6: Final Sort by price (lowest first)
+        finalProducts.sort((a, b) => a.extracted_price - b.extracted_price);
 
         console.log(`[Service] Final result: ${finalProducts.length} products`);
 
